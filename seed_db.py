@@ -66,7 +66,10 @@ SEED_NOTES = [
     {"id": "NOTE008", "customer_id": "CUST008", "deal_id": "DEAL009", "author_id": "EMP004", "content": "Technical architecture review scheduled for next week.", "created_at": "2026-07-12"}
 ]
 
-def init_db(db_path: str = "crm.db", force: bool = False):
+def init_db(db_path: str = None, force: bool = False):
+    if db_path is None:
+        from db import DB_PATH
+        db_path = DB_PATH
     if os.path.exists(db_path):
         if not force:
             print(f"Database '{db_path}' already exists. Preserving existing data.")

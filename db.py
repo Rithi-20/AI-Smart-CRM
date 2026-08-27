@@ -3,7 +3,10 @@ import sqlite3
 from typing import List, Dict, Any, Optional
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DB_PATH = os.path.join(BASE_DIR, "crm.db")
+if os.path.exists("/data") and os.access("/data", os.W_OK):
+    DB_PATH = "/data/crm.db"
+else:
+    DB_PATH = os.path.join(BASE_DIR, "crm.db")
 
 def get_connection(db_path: str = DB_PATH) -> sqlite3.Connection:
     conn = sqlite3.connect(db_path, timeout=30.0)

@@ -27,8 +27,9 @@ app.add_middleware(
 @app.on_event("startup")
 def startup_event():
     from seed_db import init_db
-    if not os.path.exists("crm.db"):
-        init_db("crm.db")
+    from db import DB_PATH
+    if not os.path.exists(DB_PATH):
+        init_db(DB_PATH)
 
 class ContextModel(BaseModel):
     page: Optional[str] = None
