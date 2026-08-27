@@ -23,12 +23,6 @@ export default function Header({ currentPage }) {
             </div>
 
             <div className="flex items-center gap-4">
-                {/* Notification Bell */}
-                <div className="relative cursor-pointer p-2 rounded-full hover:bg-slate-200/60 transition-colors">
-                    <span className="text-lg">🔔</span>
-                    <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-rose-500 rounded-full ring-2 ring-white"></span>
-                </div>
-
                 {/* User Identity Indicator */}
                 <div className="flex items-center gap-2.5 bg-white border border-slate-200 rounded-full py-1 px-3 shadow-2xs">
                     <div className="w-7 h-7 rounded-full bg-indigo-600 text-white font-bold text-xs flex items-center justify-center">
