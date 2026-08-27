@@ -42,13 +42,6 @@
       </div>
 
       <nav class="flex-1 p-3 space-y-1 overflow-y-auto" id="nav-container"></nav>
-
-      <div class="p-3 border-t border-[#1F2937]">
-        <div class="bg-[#1F2937] border border-[#374151] rounded-lg p-3 text-center">
-          <div class="text-sm font-semibold text-slate-200">SQLite Engine</div>
-          <div class="text-[11px] text-indigo-400 mt-0.5">Single Source of Truth</div>
-        </div>
-      </div>
     </aside>
 
     <!-- Main Content -->
@@ -121,7 +114,9 @@
   </div>
 
   <script>
-    const API_BASE = "http://127.0.0.1:8000/api";
+    const API_BASE = typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
+      ? "http://127.0.0.1:8000/api"
+      : "/api";
     let currentPage = 'overview';
     let currentSessionId = 'sess_' + Math.random().toString(36).substring(2, 9);
     let drawerContext = { type: null, id: null };
@@ -792,7 +787,7 @@
             <div class="overflow-x-auto">
               <table class="w-full text-left text-xs">
                 <thead>
-                  <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold uppercase"><th class="py-2.5 px-3">Timestamp</th><th class="py-2.5 px-3">Performed By</th><th class="py-2.5 px-3">Action Type</th><th class="py-2.5 px-3">Target Entity</th><th class="py-2.5 px-3">Previous Value</th><th class="py-2.5 px-3">Updated Value</th></tr>
+                  <tr class="bg-slate-50 border-b border-slate-200 text-slate-500 font-bold uppercase"><th class="py-2.5 px-3">Timestamp</th><th class="py-2.5 px-3">Performed By</th><th class="py-2.5 px-3">Action Type</th><th class="py-2.5 px-3">Target Entity</th><th class="py-2.5 px-3">Updated Value</th></tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
                   ${items.map(log => `
@@ -801,7 +796,6 @@
                       <td class="py-2.5 px-3 font-bold text-indigo-700">${log.performed_by}</td>
                       <td class="py-2.5 px-3"><span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-slate-100 text-slate-800 border border-slate-200">${log.action_type}</span></td>
                       <td class="py-2.5 px-3 font-semibold text-slate-900">${log.target_table} #${log.target_id}</td>
-                      <td class="py-2.5 px-3 text-slate-500 font-mono text-[11px] truncate max-w-[150px]">${log.before_value || 'None'}</td>
                       <td class="py-2.5 px-3 text-emerald-700 font-mono text-[11px] truncate max-w-[180px]">${log.after_value}</td>
                     </tr>
                   `).join('')}
