@@ -28,10 +28,13 @@ export default function AiAssistantPage({ activeSessionId, onSelectSession }) {
             const data = await fetchConversations();
             setSessions(data || []);
 
-            // Check if saved session in localStorage exists
-            const savedId = localStorage.getItem('active_chat_id');
-            if (savedId && data && data.some((s) => s.id === savedId) && savedId !== activeSessionId) {
-                onSelectSession(savedId);
+            if (data && data.length > 0) {
+                const savedId = localStorage.getItem('active_chat_id');
+                const validSaved = savedId && data.some((s) => s.id === savedId);
+                const targetId = validSaved ? savedId : data[0].id;
+                if (targetId !== activeSessionId) {
+                    onSelectSession(targetId);
+                }
             }
         } catch (err) {
             console.error(err);

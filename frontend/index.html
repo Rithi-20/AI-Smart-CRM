@@ -321,6 +321,10 @@
         const sessions = await apiFetch('/ai/conversations');
         const container = document.getElementById('ai-sessions-list');
         if (!container) return;
+        if (sessions.length > 0 && !sessions.some(s => s.id === currentSessionId)) {
+          currentSessionId = sessions[0].id;
+          loadAiThread();
+        }
         container.innerHTML = sessions.map(s => `
           <button onclick="switchAiSession('${s.id}')" class="w-full text-left p-2.5 rounded-lg text-xs font-semibold truncate ${s.id === currentSessionId ? 'bg-indigo-50 text-indigo-700 border border-indigo-200' : 'text-slate-700 hover:bg-slate-200/60'}">
             💬 ${s.title || 'Conversation Session'}
