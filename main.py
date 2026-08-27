@@ -299,16 +299,28 @@ def delete_conversation(session_id: str):
     crm_service.delete_chat_session(session_id)
     return {"success": True, "message": f"Chat session '{session_id}' deleted."}
 
+frontend_dist = os.path.join(os.path.dirname(__file__), "frontend", "dist")
 frontend_dir = os.path.join(os.path.dirname(__file__), "frontend")
-if os.path.exists(frontend_dir):
-    app.mount("/static", StaticFiles(directory=os.path.join(frontend_dir, "src")), name="static")
 
-@app.get("/")
-def serve_index():
-    index_path = os.path.join(frontend_dir, "index.html")
-    if os.path.exists(index_path):
-        return FileResponse(index_path)
-    return {"message": "SmartCRM AI API active. Frontend index.html not found."}
+if os.path.exists(frontend_dist):
+    assets_dir = os.path.join(frontend_dist, "assets")
+    if os.path.exists(assets_dir):
+        app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
+
+@app.get("/{full_path:path}")
+def serve_spa(full_path: str):
+    if full_path.startswith("api"):
+        raise HTTPException(status_code=404, detail="API route not found")
+    
+    dist_index = os.path.join(frontend_dist, "index.html")
+    if os.path.exists(dist_index):
+        return FileResponse(dist_index)
+        
+    dev_index = os.path.join(frontend_dir, "index.html")
+    if os.path.exists(dev_index):
+        return FileResponse(dev_index)
+        
+    return {"message": "SmartCRM AI API active."}
 
 if __name__ == "__main__":
     import uvicorn
