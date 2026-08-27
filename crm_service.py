@@ -422,7 +422,7 @@ def get_audit_logs(limit: int = 100) -> List[Dict[str, Any]]:
     """
     Retrieves system audit logs from action_log table.
     """
-    query = "SELECT id, action_type, target_table, target_id, before_value, after_value, performed_by, timestamp FROM action_log ORDER BY id DESC LIMIT ?"
+    query = "SELECT id, action_type, target_table, target_id, after_value, performed_by, timestamp FROM action_log ORDER BY id DESC LIMIT ?"
     return execute_query(query, (limit,))
 
 def get_customer_360(customer_id: str) -> Optional[Dict[str, Any]]:
@@ -550,7 +550,7 @@ def get_paginated_audit_logs(page: int = 1, page_size: int = 25) -> Dict[str, An
 # ==========================================
 
 def ensure_chat_schema():
-    conn = sqlite3.connect("crm.db")
+    conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS chat_sessions (
@@ -671,7 +671,7 @@ def get_chat_session_context(session_id: str) -> Optional[dict]:
 
 def delete_chat_session(session_id: str) -> bool:
     ensure_chat_schema()
-    conn = sqlite3.connect("crm.db")
+    conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("DELETE FROM chat_messages WHERE session_id = ?", (session_id,))
     cursor.execute("DELETE FROM chat_sessions WHERE id = ?", (session_id,))
@@ -698,14 +698,14 @@ def update_deal_status_service(deal_id: str, new_status: str, performed_by: str 
     now_str = datetime.now().isoformat()
     today_str = CURRENT_DATE_STR
 
-    conn = sqlite3.connect("crm.db")
+    conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("UPDATE deals SET status = ?, updated_at = ? WHERE id = ?", (new_status, today_str, deal_id))
 
     log_id = generate_next_id("action_log", "LOG")
     cursor.execute(
-        "INSERT INTO action_log (id, action_type, target_table, target_id, before_value, after_value, performed_by, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-        (log_id, "UPDATE_DEAL_STATUS", "deals", deal_id, f"status: {old_status}", f"status: {new_status}", performed_by, now_str)
+        "INSERT INTO action_log (id, action_type, target_table, target_id, after_value, performed_by, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?)",
+        (log_id, "UPDATE_DEAL_STATUS", "deals", deal_id, f"status: {old_status} -> {new_status}", performed_by, now_str)
     )
 
     conn.commit()
@@ -725,7 +725,7 @@ def add_note_service(customer_id: str, content: str, deal_id: Optional[str] = No
     now_str = datetime.now().isoformat()
     today_str = CURRENT_DATE_STR
 
-    conn = sqlite3.connect("crm.db")
+    conn = get_connection()
     cursor = conn.cursor()
     cursor.execute(
         "INSERT INTO notes (id, customer_id, deal_id, author_id, content, created_at) VALUES (?, ?, ?, ?, ?, ?)",
@@ -734,8 +734,8 @@ def add_note_service(customer_id: str, content: str, deal_id: Optional[str] = No
 
     log_id = generate_next_id("action_log", "LOG")
     cursor.execute(
-        "INSERT INTO action_log (id, action_type, target_table, target_id, before_value, after_value, performed_by, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-        (log_id, "ADD_NOTE", "notes", note_id, "None", f"content: {content} (customer_id={customer_id})", performed_by, now_str)
+        "INSERT INTO action_log (id, action_type, target_table, target_id, after_value, performed_by, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?)",
+        (log_id, "ADD_NOTE", "notes", note_id, f"content: {content} (customer_id={customer_id})", performed_by, now_str)
     )
 
     conn.commit()
@@ -762,14 +762,14 @@ def assign_lead_service(deal_id: str, salesperson_name: str, performed_by: str =
     now_str = datetime.now().isoformat()
     today_str = CURRENT_DATE_STR
 
-    conn = sqlite3.connect("crm.db")
+    conn = get_connection()
     cursor = conn.cursor()
     cursor.execute("UPDATE deals SET owner_id = ?, updated_at = ? WHERE id = ?", (new_sp_id, today_str, deal_id))
 
     log_id = generate_next_id("action_log", "LOG")
     cursor.execute(
-        "INSERT INTO action_log (id, action_type, target_table, target_id, before_value, after_value, performed_by, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-        (log_id, "ASSIGN_LEAD", "deals", deal_id, f"owner: {old_owner_name}", f"owner: {new_sp_name} ({new_sp_id})", performed_by, now_str)
+        "INSERT INTO action_log (id, action_type, target_table, target_id, after_value, performed_by, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?)",
+        (log_id, "ASSIGN_LEAD", "deals", deal_id, f"owner: {old_owner_name} -> {new_sp_name} ({new_sp_id})", performed_by, now_str)
     )
 
     conn.commit()
