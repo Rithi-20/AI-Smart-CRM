@@ -35,8 +35,8 @@ export default function Sidebar({ currentPage, onSelectPage }) {
                             key={item.id}
                             onClick={() => onSelectPage(item.id)}
                             className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all duration-150 ${isActive
-                                    ? 'bg-[#4F46E5] text-white shadow-sm shadow-indigo-500/30'
-                                    : 'text-slate-400 hover:bg-[#1F2937] hover:text-white'
+                                ? 'bg-[#4F46E5] text-white shadow-sm shadow-indigo-500/30'
+                                : 'text-slate-400 hover:bg-[#1F2937] hover:text-white'
                                 }`}
                         >
                             <span className="text-base">{item.icon}</span>
@@ -46,13 +46,6 @@ export default function Sidebar({ currentPage, onSelectPage }) {
                 })}
             </nav>
 
-            {/* Bottom Ground Truth Badge */}
-            <div className="p-3 border-t border-[#1F2937]">
-                <div className="bg-[#1F2937] border border-[#374151] rounded-lg p-3 text-center">
-                    <div className="text-sm font-semibold text-slate-200">SQLite Engine</div>
-                    <div className="text-[11px] text-indigo-400 mt-0.5">Single Source of Truth</div>
-                </div>
-            </div>
         </aside>
     );
 }
