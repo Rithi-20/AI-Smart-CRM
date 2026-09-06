@@ -6,12 +6,12 @@ A production-grade, full-stack **AI-Powered CRM Assistant** built with **FastAPI
 
 ##  Key Features
 
-- ** Schema-Aware Intent Planner**: Uses Hugging Face LLM (`Qwen/Qwen2.5-72B-Instruct`) to convert natural language queries into deterministic SQLite query plans.
-- **  Natural Language Answer Synthesis**: Generates clean, professional answers grounded strictly in retrieved CRM database facts.
-- ** Two-Phase Entity Resolution & Disambiguation**: Deterministically resolves customer/deal names. When multiple matching names are found (e.g. two *Rahuls*), interactive **Option 1**, **Option 2** UI buttons are presented for safe candidate selection.
-- ** Single-Paragraph Chat History Summarization**: Synthesizes session interaction histories into clear, narrative single-paragraph summaries.
-- ** Immutable Audit Log**: Automatically records all CRM mutations (`UPDATE_DEAL_STATUS`, `ASSIGN_LEAD`, `ADD_NOTE`) with `action_type`, `target_entity`, `after_value`, `performed_by`, and `timestamp`.
-- ** Modern React UI**: Built with React, Vite, Tailwind CSS, custom markdown parsing, and tab navigation (`Customers`, `Leads`, `Deals`, `Interactions`, `Audit Log`, `AI Copilot`).
+- **Schema-Aware Intent Planner**: Uses Hugging Face LLM (`Qwen/Qwen2.5-72B-Instruct`) to convert natural language queries into deterministic SQLite query plans.
+- **Natural Language Answer Synthesis**: Generates clean, professional answers grounded strictly in retrieved CRM database facts.
+- **Two-Phase Entity Resolution & Disambiguation**: Deterministically resolves customer/deal names. When multiple matching names are found (e.g. two *Rahuls*), interactive **Option 1**, **Option 2** UI buttons are presented for safe candidate selection.
+- **Single-Paragraph Chat History Summarization**: Synthesizes session interaction histories into clear, narrative single-paragraph summaries.
+- **Immutable Audit Log**: Automatically records all CRM mutations (`UPDATE_DEAL_STATUS`, `ASSIGN_LEAD`, `ADD_NOTE`) with `action_type`, `target_entity`, `after_value`, `performed_by`, and `timestamp`.
+- **Modern React UI**: Built with React, Vite, Tailwind CSS, custom markdown parsing, and tab navigation (`Customers`, `Leads`, `Deals`, `Interactions`, `Audit Log`, `AI Copilot`).
 
 ---
 
